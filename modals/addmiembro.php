@@ -1,12 +1,11 @@
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog" role="document" style="margin-top: 2%;max-width: 900px;">
-        <!-- <div class="modal-content"> -->
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title"><strong>REGISTRO</strong></h3>
-                </div>
+    <div class="modal-dialog" role="document" style="margin-top: 5%;max-width: 900px;">
+        <div class="modal-content">
+        <div class="card-header">
+                <h2 class="card-title" style="font-size: 26px;"><strong>REGISTRO</strong></h2>
+            </div>
                 <!-- /.card-header -->
                 <!-- Formulario -->
                 <form id="miembroForm" method="post" action="saves/new_miembro.php">
@@ -116,5 +115,5 @@
                 </form>
             </div>
         </div>
-    <!-- </div> -->
+ 
 </div>

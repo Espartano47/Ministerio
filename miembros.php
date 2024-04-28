@@ -275,7 +275,7 @@ const Lista_ent = async () => {
                 <td style="text-align:center;" onclick="navigateToDetails(${dataItem.id})">${dataItem.ocupacion}</td>
                 <td style="text-align:center;" onclick="navigateToDetails(${dataItem.id})">${dataItem.correo}</td> 
                     <td style="text-align:center;">
-        <a class="btn btn-secondary edit-btn" data-toggle="modal" data-target="#editservermodal">
+        <a class="btn btn-secondary edit-btn" data-toggle="modal" data-target="#registroModal">
             <i class="fas fa-marker"></i>
         </a>
         <button class="btn btn-danger" onclick="deleteEnt(${dataItem.id})">
