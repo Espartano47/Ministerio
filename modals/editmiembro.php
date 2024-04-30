@@ -47,6 +47,35 @@
                             </select>
                         </div>
                         <div class="form-group col-md-4">
+                            <label for="Host">Estado Civil</label>
+                            <select class="form-control select2bs4" style="width: 100%;" id="edit_civil"
+                                name="edit_civil">
+                                <option value="" selected="selected">Seleccionar</option>
+                                <option value="Casado">Casado</option>
+                                    <option value="Soltero">Soltero</option>
+                                    <option value="Unión Libre">Unión Libre</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="Host">Bautizado</label>
+                            <select class="form-control select2bs4" style="width: 100%;" id="edit_bautizado"
+                                name="edit_bautizado">
+                                <option value="" selected="selected">Seleccionar</option>
+                                <option value="Si">Si</option>
+                                    <option value="No">No</option>
+                                  
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="Host">Iglesia</label>
+                            <select class="form-control select2bs4" style="width: 100%;" id="edit_iglesia"
+                                name="edit_iglesia">
+                                <option value="" selected="selected">Seleccionar</option>
+                                <option value="Si">Si</option>
+                                    <option value="No">No</option>   
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4">
                             <label for="Host">Ocupación</label>
                             <select class="form-control select2bs4" style="width: 100%;" id="edit_ocupacion"
                                 name="edit_ocupacion">

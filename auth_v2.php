@@ -18,13 +18,13 @@ if ($user_id > 0) {
 
     if ($user_info['user_level'] === '1') {
         // Redirigir según el nivel de usuario
-        $session->msg("s", "Hola ".$user_info['username'].", Bienvenido a OSWA-INV.");
+        $session->msg("s", "Hola ".$user_info['username'].", Bienvenido.");
         redirect(SITE_URL.'admin.php', false);
     } elseif ($user_info['user_level'] === '2') {
-        $session->msg("s", "Hola ".$user_info['username'].", Bienvenido a OSWA-INV.");
+        $session->msg("s", "Hola ".$user_info['username'].", Bienvenido.");
         redirect(SITE_URL.'special.php', false);
     } else {
-        $session->msg("s", "Hola ".$user_info['username'].", Bienvenido a OSWA-INV.");
+        $session->msg("s", "Hola ".$user_info['username'].", Bienvenido.");
         redirect(SITE_URL.'home.php', false);
     }
 } else {
@@ -44,5 +44,3 @@ if ($user_id > 0) {
      $session->msg("d", $errors);
      redirect(SITE_URL.'login_v2.php',false);
   }
-
-?>

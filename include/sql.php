@@ -60,6 +60,20 @@ function find_by_id($table, $id)
   else
     return NULL;
 }
+function find_by_id_profile($table, $id)
+{
+  global $db;
+  $id = (int)$id;
+
+    $sql  = "SELECT m*,c FROM miembros as m";
+    $sql .= "LEFT JOIN categories as c ON m. WHERE id=".$db->escape($id);
+    $sql .= " LIMIT 1";
+    $sql_result = $db->query($sql);
+    if( $result = $db->fetch_assoc($sql_result) )
+      return $result;
+    else
+      return NULL;
+  }
 
 
 function find_by_cedula($table, $id)
