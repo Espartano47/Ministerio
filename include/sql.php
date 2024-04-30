@@ -10,84 +10,24 @@ function find_all($table) {
     return find_by_sql("SELECT * FROM ".$db->escape($table));
   }
 }
-function find_all1($table) {
+function find_all_municipios($id) {
   global $db;
 
-  // Verificar si la tabla existe
-  if (tableExists($table)) {
-      // Si la tabla es 'categoria', realizar una consulta para agregar un campo de conteo desde 'servores'
-      if ($table === 'categories') {
-          $sql = "SELECT c.*, (
-                      SELECT COUNT(*)
-                      FROM servidores s
-                      WHERE s.Categoria = c.name
-                  ) AS conteo_servidores
-                  FROM {$table} c";
-          return find_by_sql($sql);
-      } else {
-          // Realizar una consulta general en la tabla especificada
-          $sql = "SELECT * FROM " . $db->escape($table);
-          return find_by_sql($sql);
-      }
-  } else {
-      // Manejar el caso en que la tabla no exista
-      throw new Exception("La tabla {$table} no existe.");
-  }
+    return find_by_sql("SELECT m.name, p.name AS provincia 
+    FROM municipios AS m 
+    LEFT JOIN provincias AS p 
+    ON m.provinceCode = p.code 
+    WHERE p.name = '".$db->escape($id)."'");
 }
-//buscar los servidores offline
-function find_all_by_offline($categoria) {
+function find_all_miembros() {
   global $db;
-  return find_by_sql("SELECT * FROM servidores WHERE Estatus = 'Failure' AND Categoria = '{$db->escape($categoria)}'");
-  
+
+    return find_by_sql("SELECT m.*, c.descripcion AS categoria_descripcion, o.descripcion AS ocupacion_descripcion
+    FROM miembros AS m
+    LEFT JOIN categories AS c ON m.categoria = c.id
+    LEFT JOIN categories AS o ON m.ocupacion = o.id");
+  // Ejecutar la consulta y devolver los resultados
 }
-function find_all_by_offline_bynvr($nvr) {
-  global $db;
-  return find_by_sql("SELECT * FROM servidores WHERE Estatus = 'Failure' AND Categoria = 'Camaras' AND idnvr = '{$db->escape($nvr)}'");
-  
-}
-function find_al1($table) {
-  global $db;
-
-    return find_by_sql("SELECT * FROM servidores WHERE Categoria ='{$db->escape($table)}'");
-  
-}
-function find_all_ent_form($id, $table) {
-  global $db;
-
-    return find_by_sql("SELECT * FROM {$db->escape($table)} WHERE id_formulario ='{$db->escape($id)}'");
-}
-function find_all_ent_form_paginacion($id, $table, $pagina) {
-  global $db;
-  $por_pagina = 100;
-
-  // Calcular el desplazamiento
-  $offset = ($pagina - 1) * $por_pagina;
-
-  // Consulta SQL con paginación
-  $sql = "SELECT * FROM {$db->escape($table)} WHERE id_formulario ='{$db->escape($id)}' LIMIT {$por_pagina} OFFSET {$offset}";
-
-  return find_by_sql($sql);
-}
-function find_by_categoria($level)
-{
-  global $db;
-  //$sql = "SELECT group_level FROM user_groups WHERE group_level = '{$db->escape($level)}' LIMIT 1 ";
-  $sql = "SELECT * FROM servidores WHERE Categoria = '{$db->escape($level)}'";
-  $result = $db->query($sql);
-  //return($db->num_rows($result) === 0 ? TRUE : FALSE);
-  return $result;
-}
-
-function find_server_by_categoria($id) 
-{
-  global $db;
-  $categoria = remove_junk($db->escape($id));
-  $sql = "SELECT * FROM servidores WHERE Categoria = '%$categoria%'";
-  $result = find_by_sql($sql);
-  return $result;
-
-
- }
 
 /*--------------------------------------------------------------*/
 /*s Function for Perform queries
@@ -120,6 +60,8 @@ function find_by_id($table, $id)
   else
     return NULL;
 }
+
+
 function find_by_cedula($table, $id)
 {
   global $db;
@@ -135,37 +77,6 @@ function find_by_cedula($table, $id)
   }
   else
     return NULL;
-}
-function find_by_id_server($table, $id)
-{
-  global $db;
-  $id = (int)$id;
-  if (tableExists($table)) {
-    $sql  = "SELECT * FROM ".$db->escape($table);
-    $sql .= " WHERE ID=".$db->escape($id);
-    $sql .= " LIMIT 1";
-    $sql_result = $db->query($sql);
-    if( $result = $db->fetch_assoc($sql_result) )
-      return $result;
-    else
-      return NULL;
-  }
-  else
-    return NULL;
-}
-function find_by_participante_by_form($id_formulario, $id_participante)
-{
-  global $db;
-  $id = $id_formulario;
-    $sql  = "SELECT * FROM participantes_form";
-    $sql .= " WHERE id_formulario=".$db->escape($id)." and codigo=".$db->escape($id_participante);
-    $sql .= " LIMIT 1";
-    $sql_result = $db->query($sql);
-    if( $result = $db->fetch_assoc($sql_result))
-      return $result;
-    else
-      return NULL;
-
 }
 
 function find_by_id2($table, $id)
@@ -335,11 +246,10 @@ function find_all_user() {
   $result = find_by_sql($sql);
   return $result;
 }
-function find_all_mand_en() {
+function find_all_ocupaciones() {
   global $db;
   $results = array();
-  $sql = "SELECT *";
-  $sql .="FROM dropopcions";
+  $sql = "SELECT * FROM categories WHERE name = 'Ocupaciones' ORDER BY ID ASC";
   $result = find_by_sql($sql);
   return $result;
 }

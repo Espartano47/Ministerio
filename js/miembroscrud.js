@@ -1,3 +1,47 @@
+function getMiembroByCedula(cedula) {
+    return new Promise(function(resolve, reject) {
+        //limpiar data
+        $.get('api/miembros.php?consulta=miembrosbycedula&id=' + cedula, function(data) {
+            if (data && data.id) {
+                $('#nombre').val(data.nombre);
+                //agregar un sweet alert diciendo que ya existe eperar 3 segundos y cerrar limpiar el campo de cedula y nombre
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Ya existe un miembro con la cédula ingresada se llama ' + data
+                        .nombre + ' ' + data.apellido,
+                    showConfirmButton: false,
+                    timer: 6000
+                });
+
+                resolve(false);
+                $('#cedula').val('');
+                $('#nombre').val('');
+            } else {
+                resolve(true);
+            }
+        }).fail(function() {
+            reject("Error al consultar la base de datos");
+        });
+    });
+}
+function cargarMunicipios(provincia,selectMunicipio) {
+    // Hacer la solicitud a la API
+    fetch(`api/miembros.php?consulta=municipios&descripcion=${provincia}`)
+        .then(response => response.json())
+        .then(data => {
+            selectMunicipio.innerHTML = ''; // Limpiar el contenido actual
+            // Llenar el select con los municipios correspondientes
+            data.forEach(municipio => {
+                // Crea una nueva opción
+                const option = new Option(municipio.name, municipio.name);
+                // Agrega la opción al select
+                selectMunicipio.add(option);
+            });
+        })
+        .catch(error => console.error('Error al cargar los municipios:', error));
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.querySelector('#miembroForm');
     
@@ -20,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             if (data.success) {
                 form.reset();
-                $('#exampleModal').modal('hide');  // Oculta el modal
+                $('#addmondal').modal('hide');  // Oculta el modal
                 Lista_ent(); 
                 //notificacion con sweetalert2 y que se desaparesca en 2 segundos
                 //esperar 2 segundos antes de mostrar la notificación
@@ -67,43 +111,53 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
-
-
 $(document).ready(function() {
     // Evento de clic en el botón de edición
     $('#table-data').on('click', '.edit-btn', function() {
-        // Encuentra la fila (<tr>) más cercana donde está el botón
-        var $tr = $(this).closest('tr');
-        
-        // Extrae los valores de los atributos data-* de la fila
-        var id = $tr.data('id');
-        var cedula = $tr.data('cedula');
-        var nombre = $tr.data('nombre');
-        var apellido = $tr.data('apellido');
-        var telefono = $tr.data('telefono');
-        var correo = $tr.data('correo');
-        var ocupacion = $tr.data('ocupacion');
-        
+        // Extrae el ID de la fila de la tabla
+        var id = $(this).closest('tr').data('id');
+        // Realiza una solicitud AJAX para obtener los detalles de la persona por su ID
+        $.ajax({
+            url: 'api/miembros.php?consulta=miembrosbyid&id='+id, // Reemplaza con la ruta correcta de tu API
+            type: 'GET',
+            success: function(response) {
+                // convertir response.fecha_nacimiento en fecha
+                response.fecha_nacimiento = new Date(response.fecha_nacimiento).toISOString().split('T')[0];
+                // Si la solicitud es exitosa, coloca los valores en los campos del formulario del modal
+                $('#inputId').val(response.id);
+                $('#edit_cedula').val(response.cedula);
+                $('#edit_nombre').val(response.nombre);
+                $('#edit_apellido').val(response.apellido);
+                $('#edit_telefono').val(response.telefono);
+                $('#edit_ocupacion').val(response.ocupacion).change();
+                $('#edit_correo').val(response.correo);
+                $('#edit_fechanacimiento').val(response.fecha_nacimiento);
+                $('#edit_celular').val(response.celular);
+                
+                $('#edit_sexo').val(response.sexo).change();
+                $('#edit_provincia').val(response.provincia).trigger('change');
+                $('#edit_direccion').val(response.direccion);
+                setTimeout(function() {
+                    $('#edit_municipio').val(response.municipio).trigger('change');
+                }, 50);
 
-        // Coloca los valores en los campos del formulario del modal
-        $('#editservermodal').find('#inputId').val(id);
-        $('#editservermodal').find('#cedula').val(cedula);
-        $('#editservermodal').find('#nombre').val(nombre);
-        $('#editservermodal').find('#apellido').val(apellido);
-        $('#editservermodal').find('#telefono').val(telefono);
-        $('#editservermodal').find('#ocupacion').val(ocupacion);
-        $('#editservermodal').find('#correo').val(correo);
+            },
+            error: function(xhr, status, error) {
+                // Maneja errores si la solicitud AJAX falla
+                console.error('Error al obtener los detalles de la persona:', error);
+                // Puedes mostrar un mensaje de error o manejarlo de otra manera según tus necesidades
+            }
+        });
     });
 });
 
+
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('#miembroForm1');
+    const form = document.querySelector('#editMiembroForm');
     
     form.addEventListener('submit', function(event) {
         event.preventDefault();
         const formData = new FormData(form);
-        console.log('ID:', form.elements['inputId'].value);
-
         // Realiza una solicitud POST usando fetch
         fetch(form.action, {
             method: 'POST',
@@ -113,18 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => {
             if (response.ok) {
                 return response.json();  // Obtén la respuesta como JSON
-                //alerta con sweetalert2
-                //esperar 2 segundos antes de mostrar la notificación
-                setTimeout(function() {
-                    //mostrar notificación
-                    Swal.fire({
-                        title: '¡Guardado!',
-                        text: 'El registro ha sido guardado exitosamente.',
-                        icon: 'success',
-                        timer: 2000,
-                        showConfirmButton: false
-                    });
-                }, 500);
+                
             } else {
                 throw new Error('Hubo un problema con la respuesta del servidor');
             }
@@ -132,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             if (data.success) {
                 form.reset();
-                $('#editservermodal').modal('hide');  // Oculta el modal
+                $('#editmodal').modal('hide');  // Oculta el modal
                 Lista_ent();  // Actualiza la tabla solo si la solicitud fue exitosa
             } else {
                 alert('Hubo un error al guardar el servidor: ' + data.message);

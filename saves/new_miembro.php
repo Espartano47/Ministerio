@@ -20,6 +20,7 @@ require_once('../include/load.php');
     $municipio = isset($_POST['municipio']) ? remove_junk($db->escape($_POST['municipio'])) : '';
     $celular = isset($_POST['celular']) ? remove_junk($db->escape($_POST['celular'])) : '';
     $nacimiento = isset($_POST['fechanacimiento']) ? remove_junk($db->escape($_POST['fechanacimiento'])) : '';
+    $estado_civil = isset($_POST['estado_civil']) ? remove_junk($db->escape($_POST['estado_civil'])) : '';
 
 
     // Variables de éxito y mensaje
@@ -27,8 +28,8 @@ require_once('../include/load.php');
     $message = '';
 
     // Realiza la operación de guardado en la base de datos
-    $query = "INSERT INTO miembros (cedula, nombre,apellido,telefono,correo,ocupacion,sexo,provincia,celular,fecha_nacimiento)
-              VALUES ('{$cedula}', '{$nombre}', '{$apellido}', '{$telefono}', '{$correo}', '{$ocupacion}', '{$sexo}', '{$provincia}', '{$celular}', '{$nacimiento}')";
+    $query = "INSERT INTO miembros (cedula, nombre,apellido,telefono,correo,ocupacion,sexo,provincia,celular,fecha_nacimiento,municipio,estado_civil)
+              VALUES ('{$cedula}', '{$nombre}', '{$apellido}', '{$telefono}', '{$correo}', '{$ocupacion}', '{$sexo}', '{$provincia}', '{$celular}', '{$nacimiento}', '{$municipio}', '{$estado_civil}')";
     
     // Ejecuta la consulta y verifica si fue exitosa
     if ($db->query($query)) {

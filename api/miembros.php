@@ -11,8 +11,17 @@ $time = microtime(true);
       case 'miembros':
         $result = find_all($_GET['descripcion']);
         break;
+      case 'miembrosv2':
+        $result = find_all_miembros();
+        break;
       case 'miembrosbycedula':
         $result = find_by_cedula('miembros',$_GET['id']);
+        break;
+      case 'miembrosbyid':
+        $result = find_by_id('miembros',$_GET['id']);
+        break;
+      case 'municipios':
+        $result = find_all_municipios($_GET['descripcion']);
         break;
     }
     return $result;

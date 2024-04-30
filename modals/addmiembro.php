@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+<div class="modal fade" id="addmondal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document" style="margin-top: 5%;max-width: 900px;">
         <div class="modal-content">
@@ -13,7 +13,7 @@
                         <!-- Campo para el nombre -->
                         <div class="form-row">
                             <div class="form-group col-md-3">
-                                <label for="cedula">Cedula</label>
+                                <label for="cedula">Cédula</label>
                                 <input type="text" class="form-control" id="cedula" name="cedula" required
                                     data-inputmask='"mask": "999-9999999-9"' data-mask>
                             </div>
@@ -46,16 +46,38 @@
                                 </select>
                             </div>
                             <div class="form-group col-md-4">
+                                <label for="Host">Estado Civil</label>
+                                <select class="form-control select2bs4" style="width: 100%;" id="estado_civil" name="estado_civil">
+                                    <option value="">Seleccionar</option>
+                                    <option value="Casado">Casado</option>
+                                    <option value="Soltero">Soltero</option>
+                                    <option value="Unión Libre">Unión Libre</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="Host">Bautizado</label>
+                                <select class="form-control select2bs4" style="width: 100%;" id="bautizado" name="bautizado">
+                                    <option value="">Seleccionar</option>
+                                    <option value="Si">Si</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label for="Host">Iglesia</label>
+                                <select class="form-control select2bs4" style="width: 100%;" id="iglesia" name="iglesia">
+                                    <option value="">Seleccionar</option>
+                                    <option value="Si">Si</option>
+                                    <option value="No">No</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-4">
                                 <label for="Host">Ocupación</label>
                                 <select class="form-control select2bs4" style="width: 100%;" id="ocupacion"
                                     name="ocupacion">
                                     <option value="" selected="selected">Selecionar</option>
-                                    <option>Alaska</option>
-                                    <option>California</option>
-                                    <option>Delaware</option>
-                                    <option>Tennessee</option>
-                                    <option>Texas</option>
-                                    <option>Washington</option>
+                                    <?php foreach ($ocupaciones as $ocupacion) : ?>
+                                    <option value="<?php echo $ocupacion['id']; ?>"><?php echo $ocupacion['descripcion']; ?></option>
+                                <?php endforeach; ?>
                                 </select>
                             </div>
 
@@ -92,6 +114,9 @@
                                 <select class="form-control select2bs4" style="width: 100%;" id="provincia"
                                     name="provincia">
                                     <option value="" selected="selected">Seleccionar</option>
+                                    <?php foreach ($provincias as $provincia) : ?>
+                                    <option value="<?php echo $provincia['name']; ?>"><?php echo $provincia['name']; ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                             <div class="form-group col-md-6">

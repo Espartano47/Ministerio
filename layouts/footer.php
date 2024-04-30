@@ -1,16 +1,8 @@
-<script src="plugins/jquery/jquery.min.js"></script>
-<!-- Bootstrap 4 -->
-<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-<!-- AdminLTE App -->
-<script src="dist/js/adminlte.min.js"></script>
-</body>
-</html>
-<!-- /.content-wrapper -->
 <footer class="main-footer">
     <div class="float-right d-none d-sm-block">
         <b>Version</b> 3.2.0
     </div>
-    <strong>Copyright &copy; 2024-2026  <a href="https://adminlte.io">Hanesbrands.com</a>.</strong> All rights reserved.
+    <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
 </footer>
 
 <!-- Control Sidebar -->
@@ -39,5 +31,13 @@
 <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+
+
+
+<!-- Agrega la librería Select2 JS -->
+
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
