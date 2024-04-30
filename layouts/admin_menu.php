@@ -5,7 +5,7 @@
             <a href="miembros.php" class="nav-link">
               <ion-icon class="nav-icon" name="people-outline"></ion-icon>
               <p>
-                Dashboard
+                Dashboards
               </p>
             </a>
           </li>
