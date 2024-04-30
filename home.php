@@ -17,7 +17,7 @@ include_once('layouts/header.php'); ?>
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Headcount</h1>
+            <h1 class="m-0">Headcounts</h1>
           </div><!-- /.col -->
 
         </div>
