@@ -1,46 +1,54 @@
 <?php
+include_once('../include/load.php'); 
+
 // Establecer los encabezados CORS si es necesario
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
 header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
 
-// Verificar si la solicitud es de tipo POST
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Verificar si se recibió la imagen en el formulario
-    if(isset($_POST['imagen'])) {
-        // Obtener los datos de la imagen en formato base64
-        $imagenBase64 = $_POST['imagen'];
-        
-        
-        // Decodificar la imagen base64 y obtener los datos binarios
-        $imagenBinaria = base64_decode($imagenBase64);
+// Verificar si se ha subido un archivo
+if (isset($_FILES['imagen'])) {
+    $id_usuario = $_POST['id'];
+    $nombre = $_POST['name'];
+    // Detalles del archivo subido
+    $file_name = $_FILES['imagen']['name'];
+    $file_size = $_FILES['imagen']['size'];
+    $file_tmp = $_FILES['imagen']['tmp_name'];
+    $file_type = $_FILES['imagen']['type'];
 
-        // Definir la ruta donde se guardará la imagen
-        $rutaGuardar = "../uploads/fir_form";
+    
+    // Extensión del archivo
+    $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+    $new_file_name = $nombre . '_' . $id_usuario . '.' . $file_ext;
+    
+    // Extensiones permitidas
+    $allowed_exts = array("gif", "jpeg", "jpg", "png");
 
-        // Generar un nombre único para la imagen
-        $nombreImagen = $_POST['codigo']. ".png"; // Se le agrega una extensión, en este caso .png
+    // Ruta donde se guardará el archivo
+    $upload_dir = "../uploads/";
+    $upload_path = $upload_dir . $new_file_name;
 
-        //guardar en un archivo txt dato en base64
-        $file = fopen("firma.txt", "w");
-        fwrite($file, $imagenBinaria);
-        fclose($file);
-        $path = "../uploads/fir_form/$nombreImagen";
-        //si la imagen ya existe sobreescribirla
-        if (file_exists($path)) {
-            unlink($path);
+    // Verificar si la extensión es válida
+    if (in_array($file_ext, $allowed_exts)) {
+        // Verificar si el archivo se subió correctamente
+        if ($file_size > 0 && move_uploaded_file($file_tmp, $upload_path)) {
+            $query = "UPDATE miembros 
+                  SET imagen = '{$new_file_name}'
+                  WHERE id = {$id_usuario}";
+            if ($db->query($query)) {
+                $success = true;
+                $message = 'Operación exitosa: Servidor editado con éxito.'.$file_name;
+            } else {
+                $message = 'Hubo un error al editar el servidor.';
+            }
+            // Devolver una respuesta JSON indicando la ruta donde se guardó la imagen
+            echo json_encode(["message" => "La imagen se guardó correctamente", "ruta" => $upload_dir . $file_name]);
+        } else {
+            echo json_encode(["error" => "Error al subir el archivo"]);
         }
-        file_put_contents($path, $imagenBinaria);
-        $data_uri = $imagenBase64;
-        $encoded_image = explode(",", $data_uri)[1];
-        $decoded_image = base64_decode($encoded_image);
-        file_put_contents($path, $decoded_image);
-
-        // Guardar la imagen en el servidor
-      
+    } else {
+        echo json_encode(["error" => "Tipo de archivo no permitido"]);
+    }
 } else {
-    // Si la solicitud no es de tipo POST
-    header("HTTP/1.1 405 Method Not Allowed");
-    echo json_encode(["message" => "Solo se permiten solicitudes POST"]);
-}
+    echo json_encode(["error" => "No se recibió ningún archivo"]);
 }
